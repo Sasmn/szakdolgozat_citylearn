@@ -1,4 +1,4 @@
-##Szakdolgozat:
+## Szakdolgozat:
 
 ### Fő részek:
 * szakdolgozat.ipynb: az ágensek összehasonlítása, és az eredményük elemzése
