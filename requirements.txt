@@ -1,0 +1,5 @@
+citylearn
+stable-baselines3==2.1.0
+stable-baselines3[extra]
+shimmy==0.2.1
+gym==0.25.2
