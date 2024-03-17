@@ -67,6 +67,7 @@ class CustomPricingBuilding(LSTMDynamicsBuilding):
 
         if consumption_until_now > 210.25:
             pricing = 0.194733
+            self.pricing.electricity_pricing[self.time_step] = pricing
 
         if net_electricity_consumption < 0:
             pricing = 0

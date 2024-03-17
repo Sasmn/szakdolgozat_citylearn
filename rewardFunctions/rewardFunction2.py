@@ -60,12 +60,21 @@ class CustomRewardFunction(RewardFunction):
                 
 
 
+            # delta_consumption = b.net_electricity_consumption[-1] - b.net_electricity_consumption[-2]
+            # consumption_change_penalty = 0
+            # if delta_consumption > 0:
+            #     consumption_change_penalty = max(np.power(delta_consumption, 2), b.net_electricity_consumption[-1])
+            # else:
+            #     consumption_change_penalty = 0
+            
+            # reward = -consumption_change_penalty
+            
             delta_consumption = b.net_electricity_consumption[-1] - b.net_electricity_consumption[-2]
             consumption_change_penalty = 0
             if delta_consumption > 0:
-                consumption_change_penalty = max(np.power(delta_consumption, 2), b.net_electricity_consumption[-1])
+                consumption_change_penalty = max(np.power(delta_consumption, 3), np.power(b.net_electricity_consumption[-1], 2))
             else:
-                consumption_change_penalty = 0
+                consumption_change_penalty = b.net_electricity_consumption[-1]
             
             reward = -consumption_change_penalty
 

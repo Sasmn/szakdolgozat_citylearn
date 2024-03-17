@@ -41,7 +41,7 @@
       "shared_in_central_agent": true
     },
     "outdoor_relative_humidity": {
-      "active": false,
+      "active": true,
       "shared_in_central_agent": true
     },
     "outdoor_relative_humidity_predicted_6h": {
@@ -101,7 +101,7 @@
       "shared_in_central_agent": false
     },
     "indoor_relative_humidity": {
-      "active": false,
+      "active": true,
       "shared_in_central_agent": false
     },
     "non_shiftable_load": {

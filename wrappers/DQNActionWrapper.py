@@ -2,14 +2,10 @@ from gym import spaces, ActionWrapper
 from citylearn.citylearn import CityLearnEnv
 from typing import List, Mapping
 from wrappers.DiscreteActionWrapper import DiscreteActionWrapper
-import itertools
 import numpy as np
-import sys
 
 class DQNActionWrapper(ActionWrapper):
-    """Action wrapper for :py:class:`citylearn.agents.q_learning.TabularQLearning` agent.
-
-    Wraps `env` in :py:class:`citylearn.wrappers.DiscreteActionWrapper`.
+    """Action wrapper for Stable Baselinse DQN agent.
     
     Parameters
     ----------

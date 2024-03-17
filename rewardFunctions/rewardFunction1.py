@@ -9,35 +9,17 @@ class CustomRewardFunction(RewardFunction):
         self.env=env
 
     def calculate(self, observations: List[Mapping[str, Union[int, float]]]) -> List[float]:
-        # print(observations)
+        
+        aggregated_consumption = sum(b.net_electricity_consumption[-1] for b in self.env.buildings)
+        aggregated_consumption_without_storage = sum(b.net_electricity_consumption_without_storage[-1] for b in self.env.buildings)
+        aggregated_storage_consumption = aggregated_consumption_without_storage - aggregated_consumption
 
-        reward_list = []
-        for b in self.env.buildings:       
-            peak_importance = 0.8
-            peak_consumption = max(b.net_electricity_consumption)
-            current_consumption = b.net_electricity_consumption[-1]
-            penalty1_temperature = abs(b.solar_generation[-1]) + 0.001
+        peak_consumption_penalty = 0
+        if aggregated_storage_consumption > 0:
+            peak_consumption_penalty = 1 / (1 + aggregated_consumption_without_storage) * 1 / ( 1 + aggregated_storage_consumption)
+        else:
+            peak_consumption_penalty = np.power(aggregated_consumption_without_storage, 3) * (1 + abs(aggregated_storage_consumption))
 
-            penalty1 = 1 / (abs(peak_consumption - current_consumption) + penalty1_temperature)
-            print("peak: ", peak_consumption)
-            print("current: ", current_consumption)
-            print("solar: ", abs(b.solar_generation[-1]) + 0.001)
-            print("penal1: ", penalty1)
-            print("\n")
-
-            cost = b.net_electricity_consumption_cost[-1]
-
-            battery_capacity = b.electrical_storage.capacity_history[0]
-            battery_soc = b.electrical_storage.soc[-1]/battery_capacity
-
-            penalty2 = -(1.0 + np.sign(cost)*battery_soc)
-            # print(penalty2)
-            
-            reward = - peak_importance * penalty1 - (1 - peak_importance) * penalty2 * abs(cost)
-
-            reward_list.append(reward)
-
-        reward = [sum(reward_list)]
-        # print(reward)
+        reward = [-peak_consumption_penalty]
 
         return reward
