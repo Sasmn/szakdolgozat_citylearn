@@ -1,4 +1,3 @@
-from typing import List, Mapping
 from datetime import datetime
 from citylearn.citylearn import CityLearnEnv
 from citylearn.reward_function import RewardFunction
@@ -6,6 +5,7 @@ from stable_baselines3.a2c import A2C
 from helpers.custom_callback import CustomCallback
 from citylearn.wrappers import NormalizedObservationWrapper
 from citylearn.wrappers import StableBaselines3Wrapper
+from stable_baselines3.common.callbacks import ProgressBarCallback
 
 def train_a2c(
     agent_kwargs: dict, 
@@ -64,11 +64,16 @@ def train_a2c(
     print('Number of episodes to train:', episodes)
     
     # initialize callback
-    callback = CustomCallback(env=env, total_timesteps=total_timesteps)
+    callbacks = [CustomCallback(env=env, total_timesteps=total_timesteps), ProgressBarCallback()]
 
     # train agent
     train_start_timestamp = datetime.now()
-    model = model.learn(total_timesteps=total_timesteps, callback=callback, progress_bar=True)
+    try:
+        model = model.learn(total_timesteps=total_timesteps, callback=callbacks)
+    except Exception as e:
+        print("Exception: " + str(e) + "\n")
+        callbacks[1].on_training_end()
+        print("Training stopped.\n")
     train_end_timestamp = datetime.now()
 
     # evaluate agent
@@ -86,7 +91,7 @@ def train_a2c(
     display(kpis)
 
     # get rewards
-    rewards = callback.reward_history[:episodes]
+    rewards = callbacks[0].reward_history[:episodes]
 
 
     return {

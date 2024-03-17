@@ -77,8 +77,7 @@ def train_dqn(
     print('Number of episodes to train:', episodes)
     
     # initialize callback
-    customCallback = CustomCallback(env=env, total_timesteps=total_timesteps)
-    callbacks = [customCallback, ProgressBarCallback()]
+    callbacks = [CustomCallback(env=env, total_timesteps=total_timesteps), ProgressBarCallback()]
 
     # train agent
     train_start_timestamp = datetime.now()
@@ -106,7 +105,7 @@ def train_dqn(
     display(kpis)
 
     # get rewards
-    rewards = customCallback.reward_history[:episodes]
+    rewards = callbacks[0].reward_history[:episodes]
 
 
     return {
