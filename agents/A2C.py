@@ -79,11 +79,13 @@ def train_a2c(
     # evaluate agent
     observations = env.reset()
     actions_list = []
+    rewards_list = []
 
     while not env.done:
         actions, _ = model.predict(observations, deterministic=True)
-        observations, _, _, _ = env.step(actions)
+        observations, reward, _, _ = env.step(actions)
         actions_list.append(actions)
+        rewards_list.append(reward)
 
     kpis = env.evaluate()
     kpis = kpis.pivot(index='cost_function', columns='name', values='value')
@@ -99,6 +101,7 @@ def train_a2c(
         'env': env,
         'model': model,
         'actions': actions_list,
+        'rewards_ts': rewards_list,
         'rewards': rewards,
         'agent_kwargs': agent_kwargs,
         'episodes': episodes,
