@@ -22,7 +22,7 @@ class CustomRewardFunction(RewardFunction):
 
         previous_max_deviation = None
         for i in range(1, len(district_consumptions)):
-            delta = abs(district_consumptions[i] - avg_district_consumption_without_storage)
+            delta = abs(district_consumptions[i] - avg_district_consumption)
             if previous_max_deviation is None or delta > previous_max_deviation:
                 previous_max_deviation = delta
 

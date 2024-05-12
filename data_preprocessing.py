@@ -5,12 +5,13 @@ import os
 def getData(
     active_actions,
     number_of_buildings,
-    number_of_days
+    number_of_days,
+    root_path
 ):
 
     # read the schema
     dataset_name = 'citylearn_challenge_2023_phase_3_3'
-    root_directory = os.path.join("./data", dataset_name)
+    root_directory = os.path.join(f"{root_path}data", dataset_name)
     filepath = os.path.join(root_directory, 'schema.json')
     schema = read_json(filepath)
     schema['root_directory'] = root_directory
@@ -18,7 +19,6 @@ def getData(
     random_seed = 42
     np.random.seed(random_seed)
 
-    number_of_buildings = 1
     buildings = list(schema['buildings'].keys())
     buildings = np.random.choice(buildings, size=number_of_buildings, replace=False).tolist()
 
@@ -98,7 +98,7 @@ def getData(
     # Set simulation timeframe (episodes)
     schema['simulation_start_time_step'] = 1
     lenght_of_simulation_in_days = number_of_days
-    schema['simulation_end_time_step'] = lenght_of_simulation_in_days * 24
+    schema['simulation_end_time_step'] = lenght_of_simulation_in_days * 24 + schema['simulation_start_time_step'] - 1
     print(f"\n\nSimulation timeframe: {schema['simulation_start_time_step']} to {schema['simulation_end_time_step']}")
 
     for building in schema['buildings']:

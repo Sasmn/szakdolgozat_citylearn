@@ -1,7 +1,8 @@
 from datetime import datetime
 from citylearn.citylearn import CityLearnEnv
 from citylearn.reward_function import RewardFunction
-from stable_baselines3.sac import SAC
+# from stable_baselines3.sac import SAC
+from sbx import SAC
 from helpers.custom_callback import CustomCallback
 from citylearn.wrappers import NormalizedObservationWrapper
 from citylearn.wrappers import StableBaselines3Wrapper
@@ -65,7 +66,7 @@ def train_sac(
     print('Number of episodes to train:', episodes)
     
     # initialize callback
-    callbacks = [CustomCallback(env=env, total_timesteps=total_timesteps), ProgressBarCallback()]
+    callbacks = [CustomCallback(env=env), ProgressBarCallback()]
 
     # train agent
     train_start_timestamp = datetime.now()
@@ -95,7 +96,6 @@ def train_sac(
 
     # get rewards
     rewards = callbacks[0].reward_history[:episodes]
-
 
     return {
         'random_seed': random_seed,
